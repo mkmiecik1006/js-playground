@@ -1,27 +1,26 @@
 name: Node.js CI
 
-on: [push]
+on:
+  push:
+  schedule:
+    - cron: '0 2 * * 1-5'
 
 jobs:
  tests:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
 
     steps:
+      #Checkout kodu z repo
     - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+      #wersja Node.js
+    - name: Use Node.js 20
+      #instalacja zależności
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 20
+      #wykonujemy testy
     - run: npm install
     - run: npm test
 
- print-secret:
-    needs: tests
-    runs-on: ubuntu-latest
-    steps:
-    - name: Print secret value
-      run: echo ${{ secrets.CANTEST }} | sed 's/./& /g'
+
 
